@@ -1,0 +1,33 @@
+{
+  "name": "gyp-def",
+  "version": "0.0.0",
+  "description": "gyp defintion helper",
+  "main": "gyp-def.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tape test/*.js test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mucbuc/gyp-def.git"
+  },
+  "keywords": [
+    "gyp"
+  ],
+  "author": "Mark Busenitz",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mucbuc/gyp-def/issues"
+  },
+  "homepage": "https://github.com/mucbuc/gyp-def#readme",
+  "dependencies": {
+    "tape": "*",
+    "traverjs": "*",
+    "expector": "*",
+    "commander": "*",
+    "deepmerge": "*",
+    "gyp-reader": "*"
+  }
+}
