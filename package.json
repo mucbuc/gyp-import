@@ -1,8 +1,8 @@
 {
-  "name": "gyp-def",
+  "name": "gyp-import",
   "version": "0.0.0",
-  "description": "gyp defintion helper",
-  "main": "gyp-def.js",
+  "description": "recursively read and merge gyp files",
+  "main": "gyp-import.js",
   "directories": {
     "test": "test"
   },
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mucbuc/gyp-def.git"
+    "url": "git+https://github.com/mucbuc/gyp-import.git"
   },
   "keywords": [
     "gyp"
@@ -19,9 +19,9 @@
   "author": "Mark Busenitz",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/mucbuc/gyp-def/issues"
+    "url": "https://github.com/mucbuc/gyp-import/issues"
   },
-  "homepage": "https://github.com/mucbuc/gyp-def#readme",
+  "homepage": "https://github.com/mucbuc/gyp-import#readme",
   "dependencies": {
     "tape": "*",
     "traverjs": "*",

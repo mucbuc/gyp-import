@@ -3,7 +3,7 @@ objective:
   - create product object mapping properties with types 
   - read and parse json
 
-  - recursivly process imports
+  - recursivly process includes
   - fix relative path for source
 */
 
@@ -16,7 +16,7 @@ var path = require( 'path' )
 
 function define(pathJSONs, objReader) {
   var product = {}
-    , imported = []; 
+    , included = []; 
 
   if (typeof objReader === 'undefined') {
     objReader = defaultObjectReader;
@@ -56,8 +56,8 @@ function define(pathJSONs, objReader) {
         
         traverse( content, (prop, next) => {
           
-          if (prop.hasOwnProperty('import')) {
-            handleImports( prop.import, next);
+          if (prop.hasOwnProperty('include')) {
+            handleIncludes( prop.include, next);
           }
           else if (prop.hasOwnProperty('data')) {
             handleData( prop.data, next);
@@ -74,12 +74,12 @@ function define(pathJSONs, objReader) {
           resolve(product);
         } );
                 
-        function handleImports(imports, cb) {
+        function handleIncludes(includes, cb) {
 
-          traverse( imports, ( item, next ) => {
+          traverse( includes, ( item, next ) => {
 
-            if (imported.indexOf(item) == -1) {
-              imported.push(item);
+            if (included.indexOf(item) == -1) {
+              included.push(item);
               processDependencies( path.join( pathBase, item ), pathBase )
               .then( next )
               .catch( reject );

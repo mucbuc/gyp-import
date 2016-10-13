@@ -56,9 +56,9 @@ test( 'define recursion', (t) => {
   function mapFile(path, cb) {
     var result = {
       "test.json": 
-        { import: [ 'lib/sublib/def.json' ] },
+        { include: [ 'lib/sublib/def.json' ] },
       "lib/sublib/def.json": 
-        { import: [ 'lib/sublib2/def.json' ],
+        { include: [ 'lib/sublib2/def.json' ],
           sources: [ 'src/subsrc.h', 'src/subsrc.cpp' ] },
       "lib/sublib2/def.json": 
         { sources: [ 'src/subsrc.cpp' ] }
@@ -112,7 +112,7 @@ test( 'test property merge', (t) => {
     if (path == 'b.json')
       cb( { a: 'c' } );
     if (path == 'test.json')
-      cb( { import: [ 'a.json', 'b.json' ] } );
+      cb( { include: [ 'a.json', 'b.json' ] } );
   })
   .then( (product) => {
     t.assert( product.hasOwnProperty( 'a' ) ); 
