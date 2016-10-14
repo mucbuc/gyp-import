@@ -1,6 +1,6 @@
 {
   "name": "gyp-import",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "recursively read and merge gyp files",
   "main": "gyp-import.js",
   "directories": {

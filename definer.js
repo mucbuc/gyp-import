@@ -56,8 +56,8 @@ function define(pathJSONs, objReader) {
         
         traverse( content, (prop, next) => {
           
-          if (prop.hasOwnProperty('include')) {
-            handleIncludes( prop.include, next);
+          if (prop.hasOwnProperty('includes')) {
+            handleIncludes( prop.includes, next);
           }
           else if (prop.hasOwnProperty('data')) {
             handleData( prop.data, next);
