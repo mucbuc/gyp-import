@@ -34,7 +34,7 @@ test( 'data prep', (t) => {
   });
 });
 
-test( 'define recursion', (t) => {
+test.only( 'define recursion', (t) => {
   
   var controller = new Expector(t)
     , expected = [
@@ -54,10 +54,13 @@ test( 'define recursion', (t) => {
   });
 
   function mapFile(path, cb) {
+    
+    console.log( path );
+
     var result = {
       "test.json": 
-        { includes: [ 'lib/sublib/def.json' ] },
-      "lib/sublib/def.json": 
+        { includes: [ '../sublib/def.json' ] },
+      "../sublib/def.json": 
         { includes: [ 'lib/sublib2/def.json' ],
           sources: [ 'src/subsrc.h', 'src/subsrc.cpp' ] },
       "lib/sublib2/def.json": 

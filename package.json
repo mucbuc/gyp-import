@@ -28,6 +28,7 @@
     "expector": "*",
     "commander": "*",
     "deepmerge": "*",
-    "gyp-reader": "*"
+    "gyp-reader": "*",
+    "gyp-merge": "*"
   }
 }
