@@ -42,8 +42,6 @@ function define(pathJSONs, objReader) {
 
   function processDependencies(fileJSON) {
     
-    console.log( 'processDependencies', fileJSON );
-
     const pathBase = path.dirname( fileJSON ); 
 
     return new Promise( (resolve, reject) => {
@@ -127,8 +125,6 @@ function define(pathJSONs, objReader) {
   }
 
   function defaultObjectReader(filePath, cb) {
-    
-    console.log( '****', filePath );
 
     fs.readFile( filePath, (err, data) => {
       
@@ -144,7 +140,6 @@ function define(pathJSONs, objReader) {
         gypReader( filePath, (err, data) => { 
           if (err) 
             onError(err);
-          console.log( data );
           cb( data );
         } );
       }
