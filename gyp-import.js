@@ -7,7 +7,7 @@ if (module.parent) {
 
 var define = require( './definer' )
   , program = require( 'commander' )
-  , merge = require( 'gyp-merge' )({noSingletons: false}).mergeDictionary;
+  , deepmerge = require( 'deepmerge' );
   
 program
 .version( '0.0.0' )
@@ -21,7 +21,7 @@ program
 
     define( list )
     .then( ( list_product ) => {
-      product = merge( product, list_product );
+      product = deepmerge( product, list_product );
       print( product ); 
     })
     .catch( () => {
@@ -31,10 +31,6 @@ program
     function print( product ) {
       console.log( JSON.stringify( product, null, 2 ) );
     }
-  })
-  .catch( (err) => { 
-    console.error( err );
-    throw err;
   });
 })
 .parse(process.argv);
