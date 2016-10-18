@@ -34,13 +34,13 @@ test( 'data prep', (t) => {
   });
 });
 
-test.only( 'define recursion', (t) => {
+test( 'define recursion', (t) => {
   
   var controller = new Expector(t)
     , expected = [
-      'lib/sublib2/src/subsrc.cpp',
-      'lib/sublib/src/subsrc.h', 
-      'lib/sublib/src/subsrc.cpp'
+      '../sublib2/src/subsrc.cpp',
+      '../sublib/src/subsrc.h', 
+      '../sublib/src/subsrc.cpp'
     ];
 
   testDefine( mapFile )
@@ -50,20 +50,17 @@ test.only( 'define recursion', (t) => {
     t.end();
   })
   .catch( (error) => { 
-    console.log( error ); 
+    console.error( error ); 
   });
 
   function mapFile(path, cb) {
-    
-    console.log( path );
-
     var result = {
       "test.json": 
         { includes: [ '../sublib/def.json' ] },
       "../sublib/def.json": 
-        { includes: [ 'lib/sublib2/def.json' ],
+        { includes: [ '../sublib2/def.json' ],
           sources: [ 'src/subsrc.h', 'src/subsrc.cpp' ] },
-      "lib/sublib2/def.json": 
+      "../sublib2/def.json": 
         { sources: [ 'src/subsrc.cpp' ] }
       };
 
@@ -86,8 +83,6 @@ test( 'test definer', (t) => {
   } )
   .then( (product) => {
     t.assert( product.hasOwnProperty('sources') );
-    
-    console.log( JSON.stringify(product.sources) ); 
     controller.emit( JSON.stringify(product.sources) ).check();
   });
 });
