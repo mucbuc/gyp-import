@@ -25,8 +25,7 @@ function define(pathJSONs, objReader) {
   return new Promise( (resolve, reject) => {
     traverse( pathJSONs, (pathJSON, next) => {
       
-      const absPath = path.relative( process.cwd(), pathJSON );
-      processDependencies( absPath, path.dirname( absPath ) )
+      processDependencies( path.relative( process.cwd(), pathJSON ) )
       .then( (product) => {
         next();
       })
@@ -41,8 +40,10 @@ function define(pathJSONs, objReader) {
     .catch( reject );
   }); 
 
-  function processDependencies(fileJSON, pathBase) {
+  function processDependencies(fileJSON) {
     
+    const pathBase = path.dirname( fileJSON ); 
+
     return new Promise( (resolve, reject) => {
       
       const dirJSON = path.dirname(fileJSON); 
@@ -80,7 +81,8 @@ function define(pathJSONs, objReader) {
 
             if (included.indexOf(item) == -1) {
               included.push(item);
-              processDependencies( path.join( pathBase, item ), pathBase )
+
+              processDependencies( path.join( pathBase, item ) )
               .then( next )
               .catch( reject );
             }
@@ -123,7 +125,7 @@ function define(pathJSONs, objReader) {
   }
 
   function defaultObjectReader(filePath, cb) {
-    
+
     fs.readFile( filePath, (err, data) => {
       
       if (err) 
