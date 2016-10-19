@@ -42,11 +42,9 @@ function define(pathJSONs, objReader) {
 
   function processDependencies(fileJSON) {
     
-    const pathBase = path.dirname( fileJSON ); 
-
     return new Promise( (resolve, reject) => {
       
-      const dirJSON = path.dirname(fileJSON); 
+      const dirJSON = path.dirname(fileJSON);
 
       objReader( fileJSON, (content) => {
       
@@ -82,7 +80,7 @@ function define(pathJSONs, objReader) {
             if (included.indexOf(item) == -1) {
               included.push(item);
 
-              processDependencies( path.join( pathBase, item ) )
+              processDependencies( path.join( dirJSON, item ) )
               .then( next )
               .catch( reject );
             }
