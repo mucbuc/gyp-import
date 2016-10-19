@@ -25,7 +25,7 @@ function define(pathJSONs, objReader) {
   return new Promise( (resolve, reject) => {
     traverse( pathJSONs, (pathJSON, next) => {
       
-      processDependencies( path.relative( process.cwd(), pathJSON ) )
+      processJSON( path.relative( process.cwd(), pathJSON ) )
       .then( (product) => {
         next();
       })
@@ -40,14 +40,17 @@ function define(pathJSONs, objReader) {
     .catch( reject );
   }); 
 
-  function processDependencies(fileJSON) {
+  function processJSON(fileJSON) {
     
     return new Promise( (resolve, reject) => {
       
       const dirJSON = path.dirname(fileJSON);
 
       objReader( fileJSON, (content) => {
+        processDependencies(fileJSON, content)
+      }); 
       
+      function processDependencies(fileJSON, content) {
         if (    content.hasOwnProperty('opengl') 
             &&  content.opengl) {
           product.opengl = true;
@@ -80,7 +83,7 @@ function define(pathJSONs, objReader) {
             if (included.indexOf(item) == -1) {
               included.push(item);
 
-              processDependencies( path.join( dirJSON, item ) )
+              processJSON( path.join( dirJSON, item ) )
               .then( next )
               .catch( reject );
             }
@@ -117,8 +120,7 @@ function define(pathJSONs, objReader) {
           .then( cb )
           .catch( cb ); 
         }
-
-      });
+      }
     });
   }
 
