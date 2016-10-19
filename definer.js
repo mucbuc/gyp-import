@@ -48,78 +48,84 @@ function define(pathJSONs, objReader) {
 
       objReader( fileJSON, (content) => {
         processDependencies(fileJSON, content)
+        .then( resolve )
+        .catch( reject );
       }); 
       
       function processDependencies(fileJSON, content) {
-        if (    content.hasOwnProperty('opengl') 
-            &&  content.opengl) {
-          product.opengl = true;
-        }
         
-        traverse( content, (prop, next) => {
+        return new Promise( (resolve, reject) => {
+          //var product = {}
+          if (    content.hasOwnProperty('opengl') 
+              &&  content.opengl) {
+            product.opengl = true;
+          }
           
-          if (prop.hasOwnProperty('includes')) {
-            handleIncludes( prop.includes, next);
-          }
-          else if (prop.hasOwnProperty('data')) {
-            handleData( prop.data, next);
-          }
-          else if (prop.hasOwnProperty('sources')) {
-            handleSources( prop.sources, next );
-          }
-          else {
-            product = Object.assign( product, prop );
-            next();
-          }
-        })
-        .then( () => {
-          resolve(product);
-        } );
-                
-        function handleIncludes(includes, cb) {
-
-          traverse( includes, ( item, next ) => {
-
-            if (included.indexOf(item) == -1) {
-              included.push(item);
-
-              processJSON( path.join( dirJSON, item ) )
-              .then( next )
-              .catch( reject );
+          traverse( content, (prop, next) => {
+            
+            if (prop.hasOwnProperty('includes')) {
+              handleIncludes( prop.includes, next);
+            }
+            else if (prop.hasOwnProperty('data')) {
+              handleData( prop.data, next);
+            }
+            else if (prop.hasOwnProperty('sources')) {
+              handleSources( prop.sources, next );
             }
             else {
+              product = Object.assign( product, prop );
               next();
             }
           })
-          .then( cb )
-          .catch( cb );
-        }
+          .then( () => {
+            resolve(product);
+          } );
+                  
+          function handleIncludes(includes, cb) {
 
-        function handleData(data, cb) {
+            traverse( includes, ( item, next ) => {
 
-          if (!product.hasOwnProperty('data'))
-            product.data = [];
-          
-          traverse( data, (dataPath, next) => {
-            product.data.push( path.join( dirJSON, dataPath ) );
-            next();
-          })
-          .then( cb )
-          .catch( cb ); 
-        }
+              if (included.indexOf(item) == -1) {
+                included.push(item);
 
-        function handleSources(sources, cb) {
+                processJSON( path.join( dirJSON, item ) )
+                .then( next )
+                .catch( reject );
+              }
+              else {
+                next();
+              }
+            })
+            .then( cb )
+            .catch( cb );
+          }
 
-          if (!product.hasOwnProperty('sources'))
-            product.sources = [];
+          function handleData(data, cb) {
 
-          traverse( sources, (source, next) => {
-            product.sources.push( path.join( dirJSON, source ) ); 
-            next();
-          })
-          .then( cb )
-          .catch( cb ); 
-        }
+            if (!product.hasOwnProperty('data'))
+              product.data = [];
+            
+            traverse( data, (dataPath, next) => {
+              product.data.push( path.join( dirJSON, dataPath ) );
+              next();
+            })
+            .then( cb )
+            .catch( cb ); 
+          }
+
+          function handleSources(sources, cb) {
+
+            if (!product.hasOwnProperty('sources'))
+              product.sources = [];
+
+            traverse( sources, (source, next) => {
+              product.sources.push( path.join( dirJSON, source ) ); 
+              next();
+            })
+            .then( cb )
+            .catch( cb ); 
+          }
+        });
       }
     });
   }
