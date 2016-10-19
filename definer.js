@@ -9,7 +9,8 @@ objective:
 
 'use strict';
 
-var path = require( 'path' )
+var assert = require( 'assert' )
+  , path = require( 'path' )
   , traverse = require( 'traverjs' )
   , gypReader = require( 'gyp-reader' )
   , fs = require( 'fs' );
@@ -26,7 +27,10 @@ function define(pathJSONs, objReader) {
     traverse( pathJSONs, (pathJSON, next) => {
       
       processJSON( path.relative( process.cwd(), pathJSON ) )
-      .then( (product) => {
+      .then( (local) => {
+        
+        product = Object.assign( product, local);
+
         next();
       })
       .catch( (error) => {
@@ -54,8 +58,10 @@ function define(pathJSONs, objReader) {
       
       function processDependencies(fileJSON, content) {
         
+        console.log( 'processDependencies: ', content );
+
         return new Promise( (resolve, reject) => {
-          //var product = {}
+          var product = {}
           if (    content.hasOwnProperty('opengl') 
               &&  content.opengl) {
             product.opengl = true;
@@ -73,13 +79,30 @@ function define(pathJSONs, objReader) {
               handleSources( prop.sources, next );
             }
             else {
-              product = Object.assign( product, prop );
-              next();
+              
+              if (typeof prop === 'object') {
+                
+                // TODO: need local product I can merge with product
+                // TODO: get rid of hardcoded piece of shit 
+                processDependencies(fileJSON, prop.a)
+                .then( function(local) {
+                  product.a = local;
+                  resolve( product );
+                } ) 
+                .catch( reject );                 
+              }
+              else {
+                console.log( 'assign:', prop ); 
+
+                product = Object.assign( product, prop );
+                next();
+              }
             }
           })
           .then( () => {
             resolve(product);
-          } );
+          } )
+          .catch( reject );
                   
           function handleIncludes(includes, cb) {
 
@@ -114,16 +137,17 @@ function define(pathJSONs, objReader) {
           }
 
           function handleSources(sources, cb) {
+            
+            assert( Array.isArray( sources ) ); 
 
             if (!product.hasOwnProperty('sources'))
               product.sources = [];
-
-            traverse( sources, (source, next) => {
+            
+            for (var source of sources) {
               product.sources.push( path.join( dirJSON, source ) ); 
-              next();
-            })
-            .then( cb )
-            .catch( cb ); 
+            }
+
+            cb(); 
           }
         });
       }

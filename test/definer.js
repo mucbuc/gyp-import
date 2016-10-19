@@ -135,20 +135,24 @@ test( 'test opengl property', (t) => {
 
 });
 
-test.skip( 'test nested source', (t) => { 
+test.only( 'test nested source', (t) => { 
 
   var controller = new Expector(t); 
-  controller.expect( '../somewhere/xyz.cpp' ); 
+  //controller.expect( '../somewhere/xyz.cpp' ); 
 
   define( [ '../somewhere/test.json' ], (path, cb) => {
     if (path == '../somewhere/test.json')
-      cb( { a: { 'sources': 'xyz.cpp' } } );
+      cb( { a: { 'sources': ['xyz.cpp'] } } );
   })
   .then( (product) => {
     console.log( product ); 
-    t.assert( product.hasOwnProperty( 'a' ) );
-    t.assert( product.a.hasOwnProperty( 'sources' ) );
-    controller.emit( product.a.sources ).check();
+    // t.assert( product.hasOwnProperty( 'a' ) );
+    // t.assert( product.a.hasOwnProperty( 'sources' ) );
+    // controller.emit( product.a.sources ).check();
+    t.end();
+  })
+  .catch( (error) => {
+    t.fail();
   });
 
 } ); 
