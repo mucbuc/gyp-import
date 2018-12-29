@@ -13,7 +13,7 @@ function testDefine( map ) {
 test( 'data prep', (t) => {
   
   var controller = new Expector(t)
-  controller.expect( "data/content.json" );
+  controller.expect( ["data/content.json"] );
 
   testDefine( (path, cb) => {
     
